@@ -48,6 +48,19 @@ export const updateUserService = async (id, name, email) => {
     return data
 }
 
+export const patchUpdateUserService = async (id, updates) => {
+    const { data, error } = await supabase
+        .from("users")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single()
+
+    if (error) throw error
+
+    return data
+}
+
 export const deleteUserService = async (id) => {
 
     const { data, error } = await supabase

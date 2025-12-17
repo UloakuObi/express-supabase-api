@@ -1,7 +1,8 @@
 import { createUserService, 
         getAllUsersService, 
         updateUserService, 
-        deleteUserService } from "../services/usersService.js"
+        deleteUserService, 
+        patchUpdateUserService} from "../services/usersService.js"
 
 
 // Standardized Response Structure
@@ -12,6 +13,17 @@ const handleResponse = (res, status, message, data=null) => {
         data
     })
 }
+
+// Helper function for PATCH
+const pickAllowedFields = (reqBody, allowedFields) => {
+    return Object.fromEntries(
+      Object.entries(reqBody).filter(
+        ([key, value]) =>
+          allowedFields.includes(key) && value !== undefined
+      )
+    )
+  }
+  
 
 // User Controllers
 export const createUser = async (req, res, next) => {
@@ -63,6 +75,31 @@ export const updateUser = async (req, res, next) => {
     } catch(err) {
         next(err)
     }
+}
+
+export const patchUpdateUser = async (req, res, next) => {
+
+    try {
+        const allowedFields = ["name", "email"]
+
+        const updates = pickAllowedFields(req.body, allowedFields)
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ message: "No fields to update" })
+        }
+
+        const updatedUser = await patchUpdateUserService(req.params.id, updates)
+
+        if (!updatedUser) {
+            return handleResponse(res, 404, "User not found!")
+        }
+
+        handleResponse(res, 200, "User updated successfully", updatedUser)
+
+    } catch(err) {
+        next(err)
+    }
+    
 }
 
 export const deleteUser = async (req, res, next) => {
