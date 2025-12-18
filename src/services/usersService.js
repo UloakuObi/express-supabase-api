@@ -20,7 +20,8 @@ export const getUserByIdService = async (id) => {
 
     if (error) throw error
 
-    return data
+    // Normalize Supabase response (returns null if no user with given id is found)
+    return data.length > 0 ? data[0] : null
 }
 
 export const createUserService = async (name, email) => {
@@ -45,7 +46,8 @@ export const updateUserService = async (id, name, email) => {
     
     if (error) throw error
 
-    return data
+    // Normalize Supabase response (returns null if no user with given id is found)
+    return data.length > 0 ? data[0] : null
 }
 
 export const patchUpdateUserService = async (id, updates) => {
@@ -54,10 +56,10 @@ export const patchUpdateUserService = async (id, updates) => {
         .update(updates)
         .eq("id", id)
         .select()
-        .single()
+        .maybeSingle() // Handles normalization (returns null if no user with given id is found)
 
     if (error) throw error
-
+    
     return data
 }
 
@@ -71,5 +73,6 @@ export const deleteUserService = async (id) => {
     
     if (error) throw error
 
-    return data
+    // Normalize Supabase response (returns null if no user with given id is found)
+    return data.length > 0 ? data[0] : null
 }

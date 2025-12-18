@@ -6,7 +6,7 @@ import { getAllUsers,
         deleteUser,
         patchUpdateUser } from "../controllers/userController.js"
 import validateInput from "../middleware/inputValidator.js"
-import { userPatchSchema, userPutSchema } from "../middleware/inputValidator.js"
+import { userPatchSchema, userSchema } from "../middleware/inputValidator.js"
 
 const router = express.Router()
 
@@ -15,10 +15,10 @@ router.get("/users", getAllUsers)
 router.get("/users/:id", getUserById)
 
 // POST Request
-router.post("/users", validateInput, createUser)
+router.post("/users", validateInput(userSchema), createUser)
 
 // PUT Request
-router.put("/users/:id", validateInput(userPutSchema), updateUser)
+router.put("/users/:id", validateInput(userSchema), updateUser)
 
 // PATCH Request
 router.patch("/users/:id", validateInput(userPatchSchema), patchUpdateUser)

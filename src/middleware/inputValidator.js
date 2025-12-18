@@ -1,6 +1,6 @@
 import Joi from "joi"
 
-export const userPutSchema = Joi.object({
+export const userSchema = Joi.object({
     name: Joi.string().min(2).required(),
     email: Joi.string().email().required()
 })

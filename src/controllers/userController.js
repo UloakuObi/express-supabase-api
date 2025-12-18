@@ -1,5 +1,6 @@
 import { createUserService, 
         getAllUsersService, 
+        getUserByIdService,
         updateUserService, 
         deleteUserService, 
         patchUpdateUserService} from "../services/usersService.js"
@@ -47,10 +48,10 @@ export const getAllUsers = async (req, res, next) => {
 }
 
 export const getUserById = async (req, res, next) => {
-    const { id } = req.params.id
+    // const { id } = req.params.id
 
     try {
-        const user = await getUserByIdService(id)
+        const user = await getUserByIdService(req.params.id)
         
         if (!user) {
             return handleResponse(res, 404, "User not found!")
@@ -107,10 +108,10 @@ export const deleteUser = async (req, res, next) => {
     try {
         const deletedUser = await deleteUserService(req.params.id)
 
-        if(!deleteUser) {
+        if(!deletedUser) {
             return handleResponse(res, 404, "User not found")
         }
-        handleResponse(res, 201, "User deleted successfully", deleteUser)
+        handleResponse(res, 201, "User deleted successfully", deletedUser)
 
     } catch(err) {
         next(err)
