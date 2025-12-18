@@ -5,7 +5,7 @@ import { getAllUsers,
         updateUser, 
         deleteUser,
         patchUpdateUser } from "../controllers/userController.js"
-import validateInput from "./middleware/inputValidator.js"
+import validateInput from "../middleware/inputValidator.js"
 import { userPatchSchema, userPutSchema } from "../middleware/inputValidator.js"
 
 const router = express.Router()
